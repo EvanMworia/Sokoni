@@ -1,0 +1,7 @@
+USE Sokoni
+GO
+CREATE OR ALTER PROCEDURE GetProductByName(@Name VARCHAR(255))
+AS
+BEGIN
+    SELECT * FROM Products WHERE Name = @Name
+END

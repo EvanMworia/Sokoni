@@ -1,0 +1,8 @@
+USE Sokoni
+GO
+GO
+CREATE OR ALTER PROCEDURE GetAllProducts
+AS
+BEGIN
+    SELECT * FROM Products
+END

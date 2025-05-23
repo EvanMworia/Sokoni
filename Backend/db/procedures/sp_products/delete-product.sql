@@ -1,0 +1,8 @@
+USE Sokoni
+GO
+CREATE OR ALTER PROCEDURE DeleteProduct(@ProductId VARCHAR(255))
+AS
+BEGIN
+SET NOCOUNT ON;
+    DELETE FROM Products WHERE ProductId = @ProductId
+END
