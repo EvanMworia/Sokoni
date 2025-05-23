@@ -4,7 +4,7 @@ GO
 CREATE TABLE Products(
     ProductId VARCHAR(255) PRIMARY KEY,
     Name VARCHAR(255) NOT NULL,
-    ImageUrl VARCHAR(255) NOT NULL ,
+    ImageUrl VARCHAR(MAX) NOT NULL ,
     Price DECIMAL(18, 2) NOT NULL,
     Description VARCHAR(MAX) NOT NULL,
     Stock INT NOT NULL DEFAULT 0,
