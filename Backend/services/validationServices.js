@@ -24,3 +24,26 @@ export const loginUserSchema = Joi.object({
 	Email: Joi.string().email().required(),
 	Password: Joi.string().required(),
 });
+
+export const productSchema = Joi.object({
+	Name: Joi.string().required().messages({
+		'string.empty': 'Product Name is required',
+		'any.required': 'Product Name is required',
+	}),
+	ImageUrl: Joi.string().required().messages({
+		'string.empty': 'ImageUrl is required',
+		'any.required': 'ImageUrl is required',
+	}),
+	Price: Joi.number().required().messages({
+		'number.base': 'Price must be a valid number',
+		'any.required': 'Price is required',
+	}),
+	Description: Joi.string().required().messages({
+		'string.empty': ' Description is required',
+		'any.required': ' Description is required',
+	}),
+	Stock: Joi.number().required().messages({
+		'number.base': 'Stock must be a valid number',
+		'any.required': 'Stock  amount is required',
+	}),
+});

@@ -1,5 +1,5 @@
 import mssql from 'mssql';
-import sqlConfig from './db-conn';
+import sqlConfig from './db-conn.js';
 
 class DbHelper {
 	constructor() {

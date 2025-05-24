@@ -4,7 +4,7 @@ CREATE OR ALTER PROCEDURE UpsertUser(
     @UserId VARCHAR(255),
     @Email VARCHAR (255),
     @PasswordHash VARCHAR(255),
-    @Role VARCHAR(20)
+    @Role VARCHAR(20) = 'User'
 )
 AS
 BEGIN
@@ -16,7 +16,7 @@ IF EXISTS( SELECT 1 FROM Users WHERE UserId=@UserId)
     END
 ELSE
     BEGIN
-    INSERT INTO Users(UserId, Email, PasswordHash, Role)
-    VALUES (@UserId, @Email, @PasswordHash, @Role)
+    INSERT INTO Users(UserId, Email, PasswordHash)
+    VALUES (@UserId, @Email, @PasswordHash)
     END
 END
