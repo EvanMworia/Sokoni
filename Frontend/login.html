@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sokoni | Login</title>
+		<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+	</head>
+	<body class="bg-[#f0f0f0] flex items-center justify-center min-h-screen">
+		<div class="bg-white p-10 rounded-lg shadow-lg w-full max-w-md border border-gray-200">
+			<h2 class="text-3xl font-bold mb-6 text-[#232f3e] text-center">Sign-In</h2>
+			<form id="login-form" class="space-y-5">
+				<div>
+					<label for="email" class="block text-sm font-medium text-[#37475a] mb-1">Email</label>
+					<input
+						type="email"
+						id="email"
+						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#febd69] focus:border-[#febd69] text-[#111]"
+						required
+					/>
+				</div>
+				<div>
+					<label for="password" class="block text-sm font-medium text-[#37475a] mb-1">Password</label>
+					<input
+						type="password"
+						id="password"
+						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#febd69] focus:border-[#febd69] text-[#111]"
+						required
+					/>
+				</div>
+				<button
+					type="submit"
+					class="w-full bg-[#febd69] text-[#232f3e] font-semibold py-2 rounded-lg border border-[#232f3e] shadow-sm hover:bg-[#f3a847] hover:shadow-md transition duration-200"
+				>
+					Sign In
+				</button>
+			</form>
+			<p class="text-sm text-center mt-6 text-[#37475a]">
+				New to Sokoni?
+				<a href="register.html" class="text-[#0066c0] hover:underline">Create your account</a>
+			</p>
+		</div>
+
+		<script>
+			document.getElementById('login-form').addEventListener('submit', async function (e) {
+				e.preventDefault();
+				const email = document.getElementById('email').value;
+				const password = document.getElementById('password').value;
+
+				try {
+					const res = await fetch('http://localhost:5000/auth/login', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ email, password }),
+					});
+					const data = await res.json();
+					console.log(data);
+					// Handle success: store token, redirect, etc.
+				} catch (err) {
+					console.error('Login failed', err);
+				}
+			});
+		</script>
+	</body>
+</html>

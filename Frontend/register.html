@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sokoni | Register</title>
+		<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+	</head>
+	<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+		<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+			<h2 class="text-2xl font-bold mb-6 text-[#232f3e] text-center">Create Account</h2>
+			<form id="signup-form" class="space-y-4">
+				<div>
+					<label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+					<input
+						type="email"
+						id="email"
+						class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#febd69] focus:border-[#232f3e]"
+						required
+					/>
+				</div>
+				<div>
+					<label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+					<input
+						type="password"
+						id="password"
+						class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#febd69] focus:border-[#232f3e]"
+						required
+					/>
+				</div>
+				<div>
+					<label for="confirm-password" class="block text-sm font-medium text-gray-700"
+						>Confirm Password</label
+					>
+					<input
+						type="password"
+						id="confirm-password"
+						class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#febd69] focus:border-[#232f3e]"
+						required
+					/>
+				</div>
+				<button
+					type="submit"
+					class="w-full bg-[#febd69] text-[#232f3e] font-semibold py-2 rounded-lg border border-[#232f3e] shadow-sm hover:bg-[#f3a847] hover:shadow-md transition duration-200"
+				>
+					Create Your Sokoni Account
+				</button>
+			</form>
+			<p class="text-sm text-center mt-6 text-gray-600">
+				Already have an account?
+				<a href="login.html" class="text-[#0066c0] hover:underline">Sign in</a>
+			</p>
+		</div>
+
+		<script>
+			document.getElementById('signup-form').addEventListener('submit', async function (e) {
+				e.preventDefault();
+
+				const email = document.getElementById('email').value.trim();
+				const password = document.getElementById('password').value.trim();
+				const confirmPassword = document.getElementById('confirm-password').value.trim();
+
+				if (password !== confirmPassword) {
+					alert('Passwords do not match.');
+					return;
+				}
+
+				try {
+					const res = await fetch('http://localhost:5000/auth/signup', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ email, password }),
+					});
+					const data = await res.json();
+					console.log(data);
+
+					// TODO: Replace with real logic after connecting backend
+					if (res.ok) {
+						alert('Registration successful!');
+						window.location.href = 'login.html';
+					} else {
+						alert(data.message || 'Registration failed.');
+					}
+				} catch (err) {
+					console.error('Signup failed', err);
+					alert('Something went wrong. Please try again.');
+				}
+			});
+		</script>
+	</body>
+</html>
