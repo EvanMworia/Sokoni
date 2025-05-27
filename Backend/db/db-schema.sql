@@ -21,3 +21,22 @@ CREATE TABLE Users (
     Role VARCHAR(20) NOT NULL DEFAULT 'User',
     CreatedAt DATETIME2 DEFAULT GETDATE()
 );
+
+CREATE TABLE CartItems (
+    CartItemId VARCHAR(255) PRIMARY KEY,
+    UserId VARCHAR(255) NOT NULL,
+    ProductId VARCHAR(255) NOT NULL,
+    Quantity INT NOT NULL DEFAULT 1 CHECK (Quantity > 0),
+    DateAdded DATETIME DEFAULT GETDATE(),
+
+    CONSTRAINT FK_CartItems_Users FOREIGN KEY (UserId)
+        REFERENCES Users(UserId) ON DELETE CASCADE,
+
+    CONSTRAINT FK_CartItems_Products FOREIGN KEY (ProductId)
+        REFERENCES Products(ProductId) ON DELETE CASCADE,
+
+    CONSTRAINT UQ_CartItem_User_Product UNIQUE (UserId, ProductId)
+);
+USE Sokoni
+GO
+CREATE INDEX IX_CartItems_UserId ON CartItems(UserId);
