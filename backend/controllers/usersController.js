@@ -44,7 +44,7 @@ export async function registerNewUser(req, res) {
 		await sendWelcomeEmail(Email);
 	} catch (error) {
 		console.error('Error happened ', error);
-		res.status(500).json({ message: 'Something went wrong when creating your account, check the email used' });
+		res.status(500).json({ message: `${error.message}` });
 	}
 }
 export async function login(req, res) {
@@ -58,15 +58,15 @@ export async function login(req, res) {
 
 		const userFound = (await db.executeProcedure('GetUserByEmail', { Email })).recordset;
 		if (userFound.length === 0) {
-			return res.status(400).json({ message: 'Invalid credentials, check email' });
+			return res.status(400).json({ message: 'Invalid credentials' });
 		}
 		const user = userFound[0];
 		const isPasswordMatch = await bcrypt.compare(Password, user.PasswordHash);
 		if (!isPasswordMatch) {
-			return res.status(400).json({ message: 'Invalid credentials, check paswd' });
+			return res.status(400).json({ message: 'Invalid credentials' });
 		}
 
-		const token = jwt.sign({ userId: user.UserId, email: user.Email, role: user.Role }, process.env.JWT_SECRET, {
+		const token = jwt.sign({ UserId: user.UserId, Email: user.Email, Role: user.Role }, process.env.JWT_SECRET, {
 			expiresIn: '1h',
 		});
 		return res.status(200).json({ message: 'Succesful Login', token });
