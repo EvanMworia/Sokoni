@@ -60,21 +60,25 @@
 				const password = document.getElementById('password').value.trim();
 				const confirmPassword = document.getElementById('confirm-password').value.trim();
 
+				const credentials = {
+					Email: email,
+					Password: password,
+					ConfirmPassword: confirmPassword,
+				};
 				if (password !== confirmPassword) {
 					alert('Passwords do not match.');
 					return;
 				}
 
 				try {
-					const res = await fetch('http://localhost:5000/auth/signup', {
+					const res = await fetch('http://localhost:5000/users/register', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ email, password }),
+						body: JSON.stringify(credentials),
 					});
 					const data = await res.json();
 					console.log(data);
 
-					// TODO: Replace with real logic after connecting backend
 					if (res.ok) {
 						alert('Registration successful!');
 						window.location.href = 'login.html';

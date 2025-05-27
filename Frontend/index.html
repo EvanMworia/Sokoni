@@ -12,10 +12,10 @@
 			<div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 				<h1 class="text-2xl font-bold">Sokoni</h1>
 				<nav class="space-x-6 hidden md:block">
-					<a href="#" class="hover:underline">Home</a>
 					<!-- <a href="#" class="hover:underline">Products</a> -->
 					<a href="#" class="hover:underline">Cart</a>
-					<a href="#" class="hover:underline">Login</a>
+					<a id="log-in" href="login.html" class="hover:underline">Login</a>
+					<a id="log-out" href="login.html" class="hover:underline" onclick="logOut()">Log Out</a>
 				</nav>
 			</div>
 		</header>
@@ -26,6 +26,7 @@
 				<h2 class="text-4xl md:text-5xl font-bold text-[#232f3e] mb-6">Shop Smart. Live Better.</h2>
 				<p class="text-lg md:text-xl mb-8 text-[#232f3e]">Discover amazing products at unbeatable prices.</p>
 				<a
+					id="start-shopping"
 					href="#"
 					class="bg-[#232f3e] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#1a242f] transition"
 				>
@@ -91,6 +92,28 @@
 		</div>
 
 		<script>
+			const startBtn = document.getElementById('start-shopping');
+			const logOutBtn = document.getElementById('log-out');
+			const logInBtn = document.getElementById('log-in');
+			document.addEventListener('DOMContentLoaded', () => {
+				const token = localStorage.getItem('token');
+				if (!token) {
+					logOutBtn.classList.add('hidden');
+					// document.querySelectorAll('.add-to-cart-btn').forEach((btn) => {
+					// 	btn.disabled = true;
+					// });
+				} else {
+					logInBtn.classList.add('hidden');
+					startBtn.classList.add('hidden');
+				}
+			});
+
+			function logOut() {
+				localStorage.removeItem('token');
+				alert('You have logged out. Please log in again.');
+				window.location.href = 'login.html';
+			}
+
 			const productGrid = document.getElementById('product-grid');
 			const modal = document.getElementById('product-modal');
 			const modalImage = document.getElementById('modal-image');
