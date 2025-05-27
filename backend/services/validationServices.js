@@ -47,3 +47,9 @@ export const productSchema = Joi.object({
 		'any.required': 'Stock  amount is required',
 	}),
 });
+
+export const cartInsertionSchema = Joi.object({
+	UserId: Joi.string().required(),
+	ProductId: Joi.string().required(),
+	Quantity: Joi.number().required(),
+});
