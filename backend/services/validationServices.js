@@ -51,5 +51,5 @@ export const productSchema = Joi.object({
 export const cartInsertionSchema = Joi.object({
 	UserId: Joi.string().required(),
 	ProductId: Joi.string().required(),
-	Quantity: Joi.number().required(),
+	//Quantity: Joi.number().required(),
 });
