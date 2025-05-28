@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sokoni | Cart</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+	</head>
+	<body class="bg-[#f3f3f3] text-[#111111]">
+		<!-- Navbar -->
+		<header class="bg-[#232f3e] text-white">
+			<div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+				<h1 class="text-2xl font-bold">Sokoni</h1>
+				<nav class="space-x-6 hidden md:block">
+					<a href="index.html" class="hover:underline">Home</a>
+					<a href="#" class="underline font-semibold">Cart</a>
+					<a id="log-in" href="login.html" class="hover:underline">Login</a>
+					<a id="log-out" href="login.html" class="hover:underline" onclick="logOut()">Log Out</a>
+				</nav>
+			</div>
+		</header>
+
+		<!-- Cart Section -->
+		<section class="max-w-7xl mx-auto px-4 py-16 bg-white mt-6 rounded-xl shadow-md">
+			<h2 class="text-3xl font-bold text-[#232f3e] mb-10 text-center">Your Cart</h2>
+			<div id="cart-items" class="space-y-6">
+				<!-- Cart items will be dynamically inserted here -->
+			</div>
+
+			<!-- Total & Checkout -->
+			<div class="mt-12 border-t pt-6 flex justify-between items-center">
+				<p class="text-xl font-bold text-[#232f3e]">Total: $<span id="cart-total">0.00</span></p>
+				<button
+					class="bg-[#EF4444] text-[#232f3e] px-6 py-2 rounded font-semibold hover:opacity-90 transition"
+					onclick="clearCart()"
+				>
+					Clear Cart
+				</button>
+				<button class="bg-[#febd69] text-[#232f3e] px-6 py-2 rounded font-semibold hover:opacity-90 transition">
+					Proceed to Checkout
+				</button>
+			</div>
+		</section>
+
+		<script>
+			const logOutBtn = document.getElementById('log-out');
+			const logInBtn = document.getElementById('log-in');
+
+			document.addEventListener('DOMContentLoaded', () => {
+				const token = localStorage.getItem('token');
+				if (!token) {
+					logOutBtn.classList.add('hidden');
+				} else {
+					logInBtn.classList.add('hidden');
+				}
+
+				loadCart();
+			});
+
+			function logOut() {
+				localStorage.removeItem('token');
+				alert('You have logged out. Please log in again.');
+				window.location.href = 'login.html';
+			}
+
+			async function loadCart() {
+				const token = localStorage.getItem('token');
+
+				if (!token) {
+					console.warn('User is not logged in.');
+					return;
+				}
+
+				try {
+					const response = await fetch('http://localhost:5000/cartItem/items/', {
+						method: 'GET',
+						headers: {
+							Authorization: `Bearer ${token}`,
+							'Content-Type': 'application/json',
+						},
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to load cart items.');
+					}
+
+					const cartItems = await response.json();
+					console.log('Loaded cart items:', cartItems);
+					renderCartItems(cartItems); // Pass the full array
+				} catch (error) {
+					console.error('Error loading cart:', error.message);
+				}
+			}
+			async function removeFromCart(cartItemId) {
+				const token = localStorage.getItem('token');
+
+				if (!token) {
+					console.warn('User is not logged in.');
+					return;
+				}
+
+				try {
+					const response = await fetch(`http://localhost:5000/cartItem/delete-item/${cartItemId}`, {
+						method: 'DELETE',
+						headers: {
+							Authorization: `Bearer ${token}`,
+							'Content-Type': 'application/json',
+						},
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to remove item from cart.');
+					}
+
+					console.log(`Item ${cartItemId} removed successfully`);
+					await loadCart(); // Refresh the cart
+				} catch (error) {
+					console.error('Error removing item:', error.message);
+				}
+			}
+			function renderCartItems(cartItems) {
+				const cartContainer = document.getElementById('cart-items');
+				cartContainer.innerHTML = ''; // Clear old items
+
+				if (cartItems.length === 0) {
+					cartContainer.innerHTML = '<p>Your cart is empty.</p>';
+					return;
+				}
+
+				cartItems.forEach((item) => {
+					const itemDiv = document.createElement('div');
+					itemDiv.classList.add('cart-item');
+
+					itemDiv.innerHTML = `
+            <p><strong>${item.Name}</strong> - Quantity: ${item.Quantity} @ ${item.Price} KES</p>
+            <p>Total: ${item.Quantity * item.Price} KES</p>
+            <button onclick="removeFromCart('${item.CartItemId}')">Remove</button>
+            <hr/>
+        `;
+
+					cartContainer.appendChild(itemDiv);
+				});
+			}
+			async function clearCart() {
+				const token = localStorage.getItem('token');
+				if (!token) {
+					console.warn('User is not logged in.');
+					return;
+				}
+				try {
+					const response = await fetch(`http://localhost:5000/cartItem/clear-cart/`, {
+						method: 'DELETE',
+						headers: {
+							Authorization: `Bearer ${token}`,
+							'Content-Type': 'application/json',
+						},
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to clear cart.');
+					}
+
+					console.log(`cart cleared successfully`);
+					await loadCart(); // Refresh the cart
+				} catch (error) {
+					console.error('Error Clearing cart:', error.message);
+				}
+			}
+		</script>
+	</body>
+</html>
