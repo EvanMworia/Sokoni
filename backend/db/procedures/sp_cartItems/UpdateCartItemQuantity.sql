@@ -3,7 +3,7 @@ GO
 CREATE OR ALTER PROCEDURE UpdateCartItemQuantity
     @UserId VARCHAR(255),
     @ProductId VARCHAR(255),
-    @Quantity INT -- This can be the amount to add or the new quantity based on your app logic
+    @Quantity INT = 1
 AS
 BEGIN
     -- Validate Quantity
