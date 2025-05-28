@@ -11,15 +11,15 @@ export async function addItemToCart(req, res) {
 		}
 		const { UserId, ProductId, Quantity } = req.body;
 		const cartItemId = v4();
-		console.log('the body we see is ', req.body);
+
 		await db.executeProcedure('InsertCartItem', {
 			CartItemId: cartItemId,
 			UserId,
 			ProductId,
-			Quantity,
+			//Quantity,
 		});
 
-		return res.status(201).json({ message: `${Quantity} unit(s) of ${ProductId} have been added to cart` });
+		return res.status(201).json({ message: ` ${ProductId} has been added to your cart` });
 	} catch (error) {
 		if (error.message.includes('Cart item already exists')) {
 			try {
@@ -27,12 +27,10 @@ export async function addItemToCart(req, res) {
 				await db.executeProcedure('UpdateCartItemQuantity', {
 					UserId,
 					ProductId,
-					Quantity,
+					//Quantity,
 				});
 
-				return res
-					.status(200)
-					.json({ message: `${Quantity} more unit(s) of ${ProductId} have been added to your cart.` });
+				return res.status(200).json({ message: `${ProductId} has been incremented by 1 more unit` });
 			} catch (updateError) {
 				console.error('Update error:', updateError);
 				return res.status(500).json({ message: `Failed to update quantity: ${updateError.message}` });
@@ -63,14 +61,14 @@ export async function getCartItems(req, res) {
 }
 export async function deleteCartItem(req, res) {
 	try {
-		const { CartItemId } = req.params;
+		const { id } = req.params;
 		// const { UserId } = req.user;
 
-		if (!CartItemId) {
+		if (!id) {
 			return res.status(400).json({ message: 'itemid is required.' });
 		}
 		await db.executeProcedure('DeleteCartItem', {
-			CartItemId,
+			CartItemId: id,
 		});
 
 		return res.status(200).json({ message: 'Item deleted from cart.' });
