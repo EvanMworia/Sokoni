@@ -29,7 +29,7 @@
 
 			<!-- Total & Checkout -->
 			<div class="mt-12 border-t pt-6 flex justify-between items-center">
-				<p class="text-xl font-bold text-[#232f3e]">Total: $<span id="cart-total">0.00</span></p>
+				<p class="text-xl font-bold text-[#232f3e]">Total: KES <span id="cart-total"></span></p>
 				<button
 					class="bg-[#EF4444] text-[#232f3e] px-6 py-2 rounded font-semibold hover:opacity-90 transition"
 					onclick="clearCart()"
@@ -120,27 +120,61 @@
 			}
 			function renderCartItems(cartItems) {
 				const cartContainer = document.getElementById('cart-items');
+				const totalElement = document.getElementById('cart-total');
 				cartContainer.innerHTML = ''; // Clear old items
 
 				if (cartItems.length === 0) {
 					cartContainer.innerHTML = '<p>Your cart is empty.</p>';
+					totalElement.textContent = '0.00'; // Reset total when cart is empty
 					return;
 				}
 
+				let total = 0;
+
 				cartItems.forEach((item) => {
+					const itemTotal = item.Quantity * item.Price;
+					total += itemTotal;
+
 					const itemDiv = document.createElement('div');
 					itemDiv.classList.add('cart-item');
 
 					itemDiv.innerHTML = `
-            <p><strong>${item.Name}</strong> - Quantity: ${item.Quantity} @ ${item.Price} KES</p>
-            <p>Total: ${item.Quantity * item.Price} KES</p>
-            <button onclick="removeFromCart('${item.CartItemId}')">Remove</button>
-            <hr/>
-        `;
+			<p><strong>${item.Name}</strong> - Quantity: ${item.Quantity} @ ${item.Price} KES</p>
+			<p>Total: ${itemTotal.toFixed(2)} KES</p>
+			<button onclick="removeFromCart('${item.CartItemId}')">Remove</button>
+			<hr/>
+		`;
 
 					cartContainer.appendChild(itemDiv);
 				});
+
+				// Update the total in the DOM
+				totalElement.textContent = total.toFixed(2);
 			}
+
+			// 	function renderCartItems(cartItems) {
+			// 		const cartContainer = document.getElementById('cart-items');
+			// 		cartContainer.innerHTML = ''; // Clear old items
+
+			// 		if (cartItems.length === 0) {
+			// 			cartContainer.innerHTML = '<p>Your cart is empty.</p>';
+			// 			return;
+			// 		}
+
+			// 		cartItems.forEach((item) => {
+			// 			const itemDiv = document.createElement('div');
+			// 			itemDiv.classList.add('cart-item');
+
+			// 			itemDiv.innerHTML = `
+			//     <p><strong>${item.Name}</strong> - Quantity: ${item.Quantity} @ ${item.Price} KES</p>
+			//     <p>Total: ${item.Quantity * item.Price} KES</p>
+			//     <button onclick="removeFromCart('${item.CartItemId}')">Remove</button>
+			//     <hr/>
+			// `;
+
+			// 			cartContainer.appendChild(itemDiv);
+			// 		});
+			// 	}
 			async function clearCart() {
 				const token = localStorage.getItem('token');
 				if (!token) {
