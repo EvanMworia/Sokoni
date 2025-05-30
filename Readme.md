@@ -1,6 +1,6 @@
 # 🛒 Sokoni Backend
 
-Sokoni is a backend e-commerce platform built with **Node.js**, **Express**, and **Microsoft SQL Server**. It supports:
+Sokoni, swahili for "Marketplace" is a Fullstack e-commerce platform built with **Node.js**, **Express**, for the **Backend** , **HTML**, **TailwindCSS**, **Vanilla JavaScript** for the Frontend and **Microsoft SQL Server** for the **Database**. It supports:
 
 -   User registration and login with **JWT-based authentication**
 -   Product management
