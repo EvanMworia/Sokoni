@@ -87,7 +87,11 @@
 
 			function logOut() {
 				localStorage.removeItem('token');
-				alert('You have logged out. Please log in again.');
+				Toastify({
+					text: `You have logged out. Please log in again.`,
+					duration: 3000,
+					backgroundColor: '#F87171',
+				}).showToast();
 				window.location.href = 'login.html';
 			}
 

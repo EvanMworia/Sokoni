@@ -4,6 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Sokoni | Register</title>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 		<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 	</head>
 	<body class="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -66,7 +68,12 @@
 					ConfirmPassword: confirmPassword,
 				};
 				if (password !== confirmPassword) {
-					alert('Passwords do not match.');
+					Toastify({
+						text: `Passwords must match`,
+						duration: 3000,
+						backgroundColor: '#F87171',
+						// F87171 - Red , 6EE7B7 - Green
+					}).showToast();
 					return;
 				}
 
@@ -80,14 +87,29 @@
 					console.log(data);
 
 					if (res.ok) {
-						alert('Registration successful!');
 						window.location.href = 'login.html';
 					} else {
-						alert(data.message || 'Registration failed.');
+						if (data.message.includes('UNIQUE')) {
+							Toastify({
+								text: 'Email already exists',
+								duration: 3000,
+								backgroundColor: '#F87171',
+							}).showToast();
+							return;
+						}
+						Toastify({
+							text: `${data.message}` || 'Registration failed.',
+							duration: 8000,
+							backgroundColor: '#F87171',
+						}).showToast();
 					}
 				} catch (err) {
 					console.error('Signup failed', err);
-					alert('Something went wrong. Please try again.');
+					Toastify({
+						text: `Something went wrong:${err} Please try again.`,
+						duration: 3000,
+						backgroundColor: '#F87171',
+					}).showToast();
 				}
 			});
 		</script>

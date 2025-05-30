@@ -4,6 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Sokoni | Login</title>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 		<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 	</head>
 	<body class="bg-[#f0f0f0] flex items-center justify-center min-h-screen">
@@ -63,10 +65,19 @@
 					}
 
 					localStorage.setItem('token', data.token);
+					Toastify({
+						text: `Welcome to Sokoni`,
+						duration: 3000,
+						backgroundColor: '#6EE7B7',
+					}).showToast();
 					window.location.href = 'index.html';
 				} catch (err) {
 					console.error('Login failed:', err);
-					alert(err.message);
+					Toastify({
+						text: `${err.message}`,
+						duration: 3000,
+						backgroundColor: '#F87171',
+					}).showToast();
 				}
 			});
 		</script>
