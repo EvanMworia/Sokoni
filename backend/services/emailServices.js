@@ -36,19 +36,57 @@ export async function sendWelcomeEmail(recipient) {
 		console.error('Error while sending email', error);
 	}
 }
-export async function sendOrderCreationEmail(recipient, appUserName, topic) {
+export async function sendOrderPlacedEmail(recipient, cartItems) {
 	try {
+		const itemRows = cartItems
+			.map(
+				(item) => `
+			<tr>
+				<td style="padding: 8px; border: 1px solid #ddd;">${item.Name}</td>
+				<td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.Quantity}</td>
+				<td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.Price}</td>
+			</tr>
+		`
+			)
+			.join('');
+
+		const htmlContent = `
+			<div style="font-family: Arial, sans-serif; color: #333;">
+				<h2 style="color: #006B1A;">Hi Sokoni Customer,</h2>
+				<p>Thanks for shopping with <strong>Sokoni</strong>!</p>
+				<p>Your order has been placed successfully. Here’s a summary of what you’ve ordered:</p>
+
+				<table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+					<thead>
+						<tr style="background-color: #f4f4f4;">
+							<th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Product</th>
+							<th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Quantity</th>
+							<th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Price Per Unit</th>
+						</tr>
+					</thead>
+					<tbody>
+						${itemRows}
+					</tbody>
+				</table>
+
+				<p style="margin-top: 20px;">We’ll keep you posted on the delivery status. If you have any questions, feel free to reply to this email.</p>
+				
+				<p>Thanks again for choosing Sokoni!</p>
+				
+				<p style="color: #555;"><strong>Sokoni Team</strong><br/>E-commerce made simple, it should be illegal </p>
+				
+				<hr style="margin-top: 30px;">
+				
+			</div>
+		`;
+
 		await transporter.sendMail({
-			from: `ChanuaRaiya <${process.env.EMAIL_USER}>`,
-			to: `${recipient}`,
-			subject: `New Discussion Underway`,
-			html: `
-                <h1>Vipi ${appUserName}, Kam Changia Hii!</h1>
-                <p>A new discussion on "${topic}" has been started</p><br/>
-                <p>Tusho Unafeel aje kuhusu hii stori?, <br/>Na Usisahau Ku-ChanuaRaiya</p>
-            `,
+			from: `Sokoni <${process.env.EMAIL_USER}>`,
+			to: recipient,
+			subject: '🛒 Your Sokoni Order Confirmation',
+			html: htmlContent,
 		});
 	} catch (error) {
-		console.error('Error while sending email', error);
+		console.error('Error while sending order email', error);
 	}
 }

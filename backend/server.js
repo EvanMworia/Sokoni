@@ -5,6 +5,7 @@ import cors from 'cors';
 import usersRoutes from './routes/usersRoutes.js';
 import productsRoutes from './routes/productsRoutes.js';
 import cartItemRoutes from './routes/cartItemRoutes.js';
+import checkoutRouter from './routes/checkoutRoutes.js';
 // 1. Load environment variables
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 app.use('/users', usersRoutes);
 app.use('/products', productsRoutes);
 app.use('/cartItem', cartItemRoutes);
+app.use('/orders', checkoutRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
