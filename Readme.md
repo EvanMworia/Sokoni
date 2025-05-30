@@ -18,7 +18,7 @@ Follow these steps to run the project locally:
 ### 📁 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/sokoni.git
+git clone https://github.com/EvanMworia/Sokoni.git
 cd sokoni/Backend
 
 ```
