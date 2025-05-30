@@ -4,6 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Sokoni | Cart</title>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 	<body class="bg-[#f3f3f3] text-[#111111]">
@@ -36,13 +38,56 @@
 				>
 					Clear Cart
 				</button>
-				<button class="bg-[#febd69] text-[#232f3e] px-6 py-2 rounded font-semibold hover:opacity-90 transition">
+				<button
+					id="checkout-btn"
+					class="bg-[#febd69] text-[#232f3e] px-6 py-2 rounded font-semibold hover:opacity-90 transition"
+				>
 					Proceed to Checkout
 				</button>
 			</div>
+			<p id="checkoutMessage"></p>
 		</section>
 
 		<script>
+			document.getElementById('checkout-btn').addEventListener('click', async () => {
+				const token = localStorage.getItem('token');
+
+				if (!token) {
+					//----------------ADD TOASTIFY
+					Toastify({
+						text: `You must be logged in to proceed with checkout.`,
+						duration: 3000,
+						backgroundColor: '#F87171',
+						// F87171 - Red , 6EE7B7 - Green
+					}).showToast();
+					return;
+				}
+
+				try {
+					const response = await fetch('http://localhost:5000/orders/checkout', {
+						method: 'POST',
+						headers: {
+							Authorization: `Bearer ${token}`,
+							'Content-Type': 'application/json',
+						},
+					});
+
+					const data = await response.json();
+					Toastify({
+						text: `${data.message}`,
+						duration: 3000,
+						backgroundColor: '#6EE7B7',
+					}).showToast();
+
+					if (response.ok) {
+						//--------------refresh the cart display and add Toast Notification
+						loadCart();
+						console.log('Cart cleared and order email sent!');
+					}
+				} catch (err) {
+					console.error('Checkout error', err);
+				}
+			});
 			const logOutBtn = document.getElementById('log-out');
 			const logInBtn = document.getElementById('log-in');
 
@@ -59,7 +104,12 @@
 
 			function logOut() {
 				localStorage.removeItem('token');
-				alert('You have logged out. Please log in again.');
+				Toastify({
+					text: `You have logged out. Please log in again.`,
+					duration: 3000,
+					backgroundColor: '#F87171',
+				}).showToast();
+
 				window.location.href = 'login.html';
 			}
 
@@ -152,29 +202,6 @@
 				totalElement.textContent = total.toFixed(2);
 			}
 
-			// 	function renderCartItems(cartItems) {
-			// 		const cartContainer = document.getElementById('cart-items');
-			// 		cartContainer.innerHTML = ''; // Clear old items
-
-			// 		if (cartItems.length === 0) {
-			// 			cartContainer.innerHTML = '<p>Your cart is empty.</p>';
-			// 			return;
-			// 		}
-
-			// 		cartItems.forEach((item) => {
-			// 			const itemDiv = document.createElement('div');
-			// 			itemDiv.classList.add('cart-item');
-
-			// 			itemDiv.innerHTML = `
-			//     <p><strong>${item.Name}</strong> - Quantity: ${item.Quantity} @ ${item.Price} KES</p>
-			//     <p>Total: ${item.Quantity * item.Price} KES</p>
-			//     <button onclick="removeFromCart('${item.CartItemId}')">Remove</button>
-			//     <hr/>
-			// `;
-
-			// 			cartContainer.appendChild(itemDiv);
-			// 		});
-			// 	}
 			async function clearCart() {
 				const token = localStorage.getItem('token');
 				if (!token) {
