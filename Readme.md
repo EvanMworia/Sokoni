@@ -81,5 +81,5 @@ Server running on port 5000
 ### ➡️ Full API documentation and Postman Collection:
 
 ```bash
-https://stk-push-team.postman.co/workspace/stk-push-101~d1a83f11-bd10-415d-8eec-18ae294ae2a5/collection/32680431-286d70eb-0d7d-41f3-a5f6-8dc6597d2650?action=share&creator=32680431
+https://www.postman.com/stk-push-team/workspace/sokoni-api-documentation/collection/32680431-c7c10f55-fe13-45ad-b15d-0fcf0e8dbe73?action=share&creator=32680431
 ```
