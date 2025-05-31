@@ -83,3 +83,7 @@ Server running on port 5000
 ```bash
 https://www.postman.com/stk-push-team/workspace/sokoni-api-documentation/collection/32680431-c7c10f55-fe13-45ad-b15d-0fcf0e8dbe73?action=share&creator=32680431
 ```
+
+### 👨‍💻 Author
+
+Built with ❤️ by DEV.ANS.
