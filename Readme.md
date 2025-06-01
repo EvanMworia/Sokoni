@@ -20,7 +20,7 @@ Follow these steps to run the project locally:
 
 ```bash
 git clone https://github.com/EvanMworia/Sokoni.git
-cd sokoni/Backend
+cd Sokoni/Backend
 
 ```
 
