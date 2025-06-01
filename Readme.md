@@ -50,7 +50,7 @@ EMAIL_PASS=Get-it-from-gmail
 
 ### 🗄️ 4. Setup the SQL Server Database
 
--   Navigate to the project folder Backend/db/
+-   Navigate to the Database directory: Backend/db/
 -   Open and run both of the following SQL files inside your Sokoni database:
 
 -   schema.sql: Creates all required tables (Users, Products, CartItems, etc.)
