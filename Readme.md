@@ -5,6 +5,7 @@ Sokoni, swahili for "Marketplace" is a Fullstack e-commerce platform built with 
 -   User registration and login with **JWT-based authentication**
 -   Product management
 -   Cart item handling (add/update/delete)
+-   Checkout
 -   Email notifications using **Nodemailer**
 
 ---
