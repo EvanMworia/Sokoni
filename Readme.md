@@ -33,7 +33,7 @@ npm install
 
 ### ⚙️ 3. Setup .env File
 
--   Create a .env file in the Backend/ folder and add the following:
+-   Create a .env file in the Backend/ (Root directory- same level as package.json) and add the following:
 
 ```env
 DB_NAME=Sokoni
