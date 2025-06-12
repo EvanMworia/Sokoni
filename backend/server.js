@@ -6,6 +6,7 @@ import usersRoutes from './routes/usersRoutes.js';
 import productsRoutes from './routes/productsRoutes.js';
 import cartItemRoutes from './routes/cartItemRoutes.js';
 import checkoutRouter from './routes/checkoutRoutes.js';
+import stripeRouter from './routes/stripeRoutes.js';
 // 1. Load environment variables
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/users', usersRoutes);
 app.use('/products', productsRoutes);
 app.use('/cartItem', cartItemRoutes);
 app.use('/orders', checkoutRouter);
+app.use('/checkout', stripeRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
