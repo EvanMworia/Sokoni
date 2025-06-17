@@ -25,7 +25,7 @@ app.use('/users', usersRoutes);
 app.use('/products', productsRoutes);
 app.use('/cartItem', cartItemRoutes);
 app.use('/orders', checkoutRouter);
-app.use('/checkout', stripeRouter);
+app.use(stripeRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

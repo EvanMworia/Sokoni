@@ -49,45 +49,74 @@
 		</section>
 
 		<script>
+			//Logic to proceed to checkout and pay
 			document.getElementById('checkout-btn').addEventListener('click', async () => {
 				const token = localStorage.getItem('token');
 
 				if (!token) {
-					//----------------ADD TOASTIFY
 					Toastify({
 						text: `You must be logged in to proceed with checkout.`,
 						duration: 3000,
 						backgroundColor: '#F87171',
-						// F87171 - Red , 6EE7B7 - Green
 					}).showToast();
 					return;
 				}
 
 				try {
-					const response = await fetch('http://localhost:5000/orders/checkout', {
-						method: 'POST',
+					// Step 1: Fetch cart items from your backend
+					const cartResponse = await fetch('http://localhost:5000/cartItem/items/', {
+						method: 'GET',
 						headers: {
 							Authorization: `Bearer ${token}`,
 							'Content-Type': 'application/json',
 						},
 					});
 
-					const data = await response.json();
-					Toastify({
-						text: `${data.message}`,
-						duration: 3000,
-						backgroundColor: '#6EE7B7',
-					}).showToast();
+					const cartItems = await cartResponse.json();
 
-					if (response.ok) {
-						//--------------refresh the cart display and add Toast Notification
-						loadCart();
-						console.log('Cart cleared and order email sent!');
+					if (!cartItems || cartItems.length === 0) {
+						Toastify({
+							text: `Your cart is empty.`,
+							duration: 3000,
+							backgroundColor: '#F87171',
+						}).showToast();
+						return;
 					}
-				} catch (err) {
-					console.error('Checkout error', err);
+
+					// Call payment endpoint with cart items
+					const paymentResponse = await fetch('http://localhost:5000/payment', {
+						method: 'POST',
+						headers: {
+							Authorization: `Bearer ${token}`,
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ cartItems }),
+					});
+
+					const data = await paymentResponse.json();
+
+					console.log(paymentResponse);
+					console.log(data);
+					if (paymentResponse.ok) {
+						//  Redirect to Stripe checkout page
+						window.location.href = data.url;
+					} else {
+						Toastify({
+							text: `Payment initiation failed: ${data.message}`,
+							duration: 3000,
+							backgroundColor: '#F87171',
+						}).showToast();
+					}
+				} catch (error) {
+					console.error('Checkout Error:', error);
+					Toastify({
+						text: `Something went wrong during checkout.`,
+						duration: 3000,
+						backgroundColor: '#F87171',
+					}).showToast();
 				}
 			});
+
 			const logOutBtn = document.getElementById('log-out');
 			const logInBtn = document.getElementById('log-in');
 
@@ -191,7 +220,7 @@
 					itemDiv.innerHTML = `
 			<p><strong>${item.Name}</strong> - Quantity: ${item.Quantity} @ ${item.Price} KES</p>
 			<p>Total: ${itemTotal.toFixed(2)} KES</p>
-			<button onclick="removeFromCart('${item.CartItemId}')">Remove</button>
+			<button onclick="removeFromCart('${item.CartItemId}')" class="text-[red]">Remove Item From Cart</button>
 			<hr/>
 		`;
 

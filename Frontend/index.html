@@ -16,6 +16,7 @@
 				<nav class="space-x-6 hidden md:block">
 					<!-- <a href="#" class="hover:underline">Products</a> -->
 					<a href="cart.html" class="hover:underline">Cart</a>
+					<a href="contact.html" id="contact">Contact</a>
 					<a id="log-in" href="login.html" class="hover:underline">Login</a>
 					<a id="log-out" href="login.html" class="hover:underline" onclick="logOut()">Log Out</a>
 				</nav>
@@ -72,6 +73,10 @@
 		</div>
 
 		<script>
+			const contactLink = document.getElementById('contact');
+			contactLink.addEventListener('click', () => {
+				alert('ASH');
+			});
 			const startBtn = document.getElementById('start-shopping');
 			const logOutBtn = document.getElementById('log-out');
 			const logInBtn = document.getElementById('log-in');
